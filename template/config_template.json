@@ -1,0 +1,22 @@
+{
+    "devices": {
+        "FluxDAQ": {
+            "port": "COM3",
+            "baudrate": 9600,
+            "DAQ_type": "COMPAQ",
+            "sensors":{
+                "1": {"q": true, "s_value": 16.7},
+                "2": {"q": true, "s_value": 19.29},
+                "3": {"q": true, "s_value": 64.16},
+                "4": {"q": true, "s_value": 64.51}
+            },
+            "sampling_time": 2,
+            "precheck_steps": 5
+        }
+    },
+    "writing_time": 5,
+    "save": true,
+    "filename": "data.csv",
+    "holding_duration": 10,
+    "collection_duration": 3600
+}
