@@ -72,9 +72,9 @@ class FluxDAQ(Device):
             self.ser.write(f'{s}'.encode())
             # s_bytes = bytes(map(ord,str(s))) # alternative
             # self.ser.write(s_bytes)
-            time.sleep(1)
+            time.sleep(2)
         
-        time.sleep(1)
+        time.sleep(2)
         print('Run Precheck...')
         self.precheck(precheck_steps)
         print("FluxDAQ at ", self.serial_port, " is successfully initialized \n")

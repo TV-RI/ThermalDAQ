@@ -1,4 +1,4 @@
-from devices.helpers import initialize_devices
+from devices.helpers import initialize_devices, get_devices_info
 from utils import read_config, hold_time
 from utils.data import DataCollector
 from utils.data import devices_read_threads
@@ -17,10 +17,11 @@ def run():
 
     # initialize devices
     print('Program starts... \n')
-    devices, device_info = initialize_devices(config_devices)
-    device_headers = device_info['headers']
-    device_sampling_times = device_info['sampling_times']
-    print(f"Devices initialized: {device_info['names']}")
+    devices = initialize_devices(config_devices)
+    devices_info = get_devices_info(devices)
+    device_headers = devices_info['headers']
+    device_sampling_times = devices_info['sampling_times']
+    print(f"Devices initialized: {devices_info['names']}")
     print(f"Device headers: {device_headers}")
     print(f"Device sampling times: {device_sampling_times}")
 

@@ -1,13 +1,23 @@
 from devices.Base import Device
 from devices.FluxDAQ import FluxDAQ
 from devices.SMTC import TCHAT
+import importlib
 
 
 def initialize_device(cls: str, config: dict) -> Device:
     # use cls name to choose the device class
-    if cls not in globals():
-        raise ValueError(f"Device class {cls} is not defined.")
-    device = globals()[cls](**config)
+    if cls in globals():
+        device_class = globals()[cls]
+    else:
+        # Try to dynamically import the module
+        try:
+            # Assume the module is in the devices package with the same name as the class
+            module_name = f"devices.{cls}"
+            module = importlib.import_module(module_name)
+            device_class = getattr(module, cls)
+        except (ImportError, AttributeError) as e:
+            raise ValueError(f"Device class {cls} could not be loaded: {e}")
+    device = device_class(**config)
     return device
 
 def initialize_devices(config_devices: dict):
