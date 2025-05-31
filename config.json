@@ -1,0 +1,34 @@
+{
+    "devices": {
+        "TCM": {
+            "port": "COM9",
+            "baudrate": 57600,
+            "num_devices": 2,
+            "read_keys": ["TC1:TCACTUALTEMP@3", "TC1:TCADJUSTTEMP@3",
+                          "TC1:TCACTUALVOLTAGE@3", "TC1:TCACTUALCURRENT@3",
+                          "TC1:TCSW@3", "TC1:TCMAXV@3","TC2:TCACTUALTEMP@3",
+                          "TC1:TCACTUALTEMP@2", "TC2:TCACTUALTEMP@2"],
+            "write": true,
+            "write_keys": ["TC1:TCADJUSTTEMP@3", "TC1:TCMODE@3", "TC1:TCSW@3"],
+            "cmd_gap": 0.075,
+            "sampling_time": 2
+        },
+        "FluxDAQ": {
+            "port": "COM13",
+            "baudrate": 9600,
+            "DAQ_type": "COMPAQ",
+            "sensors":{
+                "1": {"q": true, "s_value": 16.7},
+                "2": {"q": true, "s_value": 19.29},
+                "3": {"q": true, "s_value": 64.16},
+                "4": {"q": true, "s_value": 64.51}
+            },
+            "sampling_time": 2,
+            "precheck_steps": 5
+        }
+    },
+    "writing_time": 5,
+    "save": true,
+    "filename": "data.csv",
+    "holding_time": 1
+}

@@ -4,5 +4,6 @@ from devices.SMTC import TCHAT
 
 __all__ = [
     'FluxDAQ',
-    'TCHAT'
+    'TCHAT',
+    'TCM'
 ]

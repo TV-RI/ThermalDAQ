@@ -8,6 +8,7 @@ import queue
 import traceback
 
 
+# TODO: add control
 def run():
     # load config
     config = read_config()
