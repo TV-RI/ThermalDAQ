@@ -109,8 +109,16 @@ class FluxDAQ(Device):
             
     def read_data(self):
         # TODO: check if collected data is correct/clean
-        output_str = self.ser.readline().decode()
-        if len(output_str.split(',')) != self.report_num_sensors*2:
+        output_str = None
+        if self.ser.inWaiting() > 0:
+            outputs = self.ser.readlines()
+            while len(outputs) > 0:
+                line = outputs.pop().decode().strip()
+                if len(line.split(',')) == self.report_num_sensors*2:
+                    output_str = line
+                    break
+        if output_str is None:
+            time.sleep(self.sampling_time)
             return None
         output_data = []
         for i, val in enumerate(output_str.split(',')):
