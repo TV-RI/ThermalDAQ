@@ -155,20 +155,7 @@ class TCM(Device):
             else:
                 print(f"Device {addr} is connected and write in {attr} with value {val} is valid")
                 # print(f"Write command {attr} to address {addr} with value {val} is successful")
-
-    def issubset_write_keys(self, keys: List[str]):
-        return set(keys).issubset(set(self.write_keys))
     
-    def requires_write_mode(func):
-        """
-        Decorator to ensure that a function can only be called if `self.write` is True.
-        """
-        def wrapper(self, *args, **kwargs):
-            if not getattr(self, 'write_mode', False):
-                raise RuntimeError(f"The function '{func.__name__}' requires writing to be enabled. Set write=True to use this function.")
-            return func(self, *args, **kwargs)
-        return wrapper
-
     def read_data(self):
         # TODO: is flush neccesary?
         # TODO: check if collected data is correct/clean
@@ -194,7 +181,7 @@ class TCM(Device):
         self.ser.write(f"{attr}?@{address}\r".encode())
         time.sleep(self.cmd_gap)
     
-    @requires_write_mode
+    @Device.requires_write_mode
     def _write_cmd(self, attr: str, address: str, val):
         self.ser.write(f"{attr}={val}@{address}\r".encode())
         time.sleep(self.cmd_gap)
@@ -202,7 +189,7 @@ class TCM(Device):
         # err_code = extract_error_code(readout)
         # return err_code
     
-    @requires_write_mode
+    @Device.requires_write_mode
     def write_cmd(self, attr: str, address: str, val):
         """
         Write single command to the device
@@ -215,7 +202,7 @@ class TCM(Device):
                 raise AttributeError(f"Error code {err_code} for attribute {attr} to \
                                     address {address}: {self._errorcode_report(err_code)}")
     
-    @requires_write_mode
+    @Device.requires_write_mode
     def write_cmds(self, attributes: List[str], addresses: List[int], vals: List):
         """
         Write multiple commands to the devices
@@ -236,13 +223,14 @@ class TCM(Device):
             # for attr, addr, val in zip(attributes, addresses, vals):
             #     self.write_cmd(attr, addr, val)
 
-    @requires_write_mode
-    def write_data(self, data, keys=None):
+    @Device.requires_write_mode
+    def write_data(self, data, keys=None, keys_validated=False):
         """
             Write data to the TCM devices.
             - data: a dictionary, list, numpy array, or even a single value
             - keys: user can specify the keys to write to the devices, but must be a subset 
                 of the predefined write keys
+            - keys_validated: if True, keys are already checked to be a subset of the write keys
         """
         if isinstance(data, dict):
             # input data is a dictionary
@@ -267,7 +255,7 @@ class TCM(Device):
             self.write_cmds(self.tmp_write_attrs, self.tmp_write_devices, vals)
         else:
             # check if the keys are a subset of the write
-            if not self.issubset_write_keys(keys):
+            if not keys_validated and not self.issubset_write_keys(keys):
                 raise ValueError("The keys must be a subset of the write keys")
             attrs = [self.write_attributes[self.write_keys.index(k)] for k in keys]
             devices = [self.write_devices[self.write_keys.index(k)] for k in keys]

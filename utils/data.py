@@ -76,11 +76,12 @@ def wait_until_time(timestamp: float) -> None:
 
 class DataCollector:
     """
-    Use a class:
-        - save header information
-        - hashmap and list for data 
+    Function of this class:
+        - save hashmap and list for data with headers
         - save last valid data
         - controller can directly access the latest step data
+    The data collection frequency is same as the writing frequency.
+    (I don't see the need to write data asynchronously yet)
     """
     def __init__(self, queues: List[queue.Queue], headers: List[List[str]],
                  save=False, filepath=None, filename=None) -> None:

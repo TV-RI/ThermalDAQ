@@ -48,11 +48,13 @@ def initialize_devices(config_devices: dict):
             raise RuntimeError("Device initialization interrupted by user.")
     return devices
 
-def get_devices_info(devices):
+def get_devices_info(devices: list[Device]):
     devices_info = {
         'names': [device.name for device in devices],
         'headers': [device.header for device in devices],
         'sampling_times': [device.sampling_time for device in devices]
     }
     return devices_info
-    
+
+def get_device_info(device: Device):
+    return device.get_info()
